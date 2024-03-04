@@ -1,3 +1,8 @@
+// описаний в документації
+import SimpleLightbox from 'simplelightbox';
+// додатковий імпорт стилів
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 const images = [
   {
     preview:
@@ -64,23 +69,36 @@ const images = [
   },
 ];
 
-const galleryList = document.querySelector('ul.gallery');
-const galleryMarkup = images.map(
-  image => `<li class="gallery-item">
-  <a class="gallery-link" href="${image.original}">
-    <img
-      class="gallery-image"
-      width="1280"
-      height="100%"
-      src="${image.preview}"
-      data-source="${image.original}"
-      alt="${image.description}"
-    />
-  </a>
-  </li>`
-);
+const container = document.querySelector('.gallery');
 
-galleryList.insertAdjacentHTML('beforeend', galleryMarkup.join(''));
+function createGalleryMarkup(images) {
+  return images
+    .map(
+      ({ preview, original, description }) => `
+    <li class="gallery-item">
+    <a class="gallery-link" href="${original}">
+      <img
+        class="gallery-image"
+        src="${preview}"
+        alt="${description}"
+      />
+    </a>
+  </li>
+`
+    )
+    .join('');
+}
+container.insertAdjacentHTML('beforeend', createGalleryMarkup(images));
 
-let gallery = new SimpleLightbox('.gallery a');
-gallery.on('show.simplelightbox', function () {});
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+lightbox.on('show.simplelightbox', function () {});
+
+// $('.some-element a').simpleLightbox({
+//   function() {},
+// });
+// gallery.on('error.simplelightbox', function (e) {});
+
+// const gallery = $('.gallery a').simpleLightbox();
